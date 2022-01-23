@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define n 4
+#define m 3
+static double x[n+1]={0.4,0.5,0.6,0.7,0.8};
+static double y[n+1]={0.38942,0.47943,0.56464,0.64422,0.71736};
+static double xx[m+1]={0.45,0.55,0.75};
+double DifferenceQuotient(double x[],double y[],double f[][n+1])
+{
+    int i,j;
+    for(i=0;i<=n;i++)
+    {
+      f[i][0]=y[i];
+    }
+    for(j=1;j<=n;j++)
+    {
+        for(i=j;i<=n;i++)
+        f[i][j]=(f[i][j-1]-f[i-1][j-1])/(x[i]-x[i-j]);
+    }
+   printf("\n%12s%12s","xi","f(xi)");
+   for(j=1;j<=n;j++)
+   {
+       printf("%9d%s",j,"½×");
+   }
+   printf("\n");
+   for(j=1;j<=38;j++)
+    printf("--");
+   printf("\n");
+   for(i=0;i<=n;i++)
+   {
+       printf("%12f",x[i]);
+       for(j=0;j<=i;j++)
+       {
+           printf("%12f",f[i][j]);
+       }
+       printf("\n");
+   }
+   for(j=1;j<=38;j++)
+    printf("--");
+    printf("\n");
+}
+int main()
+{
+    int s,k;
+    double p,f[n+1][n+1];
+   double DifferenceQuotient(double x[],double y[],double f[][n+1]);
+   DifferenceQuotient(x,y,f);
+    for (s=0;s<=m-1;s++)
+    {
+       p=f[n][n];
+       for(k=n-1;k>=0;k--)
+       {
+           p=p*(xx[s]-x[k])+f[k][k];
+       }
+        printf("p(%f)=%f\n",xx[s],p);
+    }
+    return 0;
+}

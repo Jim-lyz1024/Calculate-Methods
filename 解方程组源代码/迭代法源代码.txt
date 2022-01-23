@@ -1,0 +1,224 @@
+1、雅克比迭代法
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 10
+
+double A[MAX][MAX];
+double b[MAX];
+double X[MAX];
+double Y[MAX];
+double X0[MAX];
+int NUM;
+double epsilon=1e-5;
+
+void Input_Matrix()//输入矩阵
+{
+    int i,j;
+    printf("系数矩阵A的阶数:\n");
+    scanf("%d",&NUM);
+    for(i=1; i<=NUM; i++)
+    {
+        printf("系数矩阵A的第%d行元素:\n",i);
+        for(j=1; j<=NUM; j++)
+            scanf("%lf",&A[i-1][j-1]);
+    }
+    printf("右端项b:\n");
+    for(i=1; i<=NUM; i++)
+    {
+        scanf("%lf",&b[i-1]);
+    }
+    printf("输入的系数矩阵A:\n");
+    for(i=0; i<NUM; i++)
+    {
+        for(j=0; j<NUM; j++)
+            printf("%.4lf\t",A[i][j]);
+        printf("\n");
+    }
+    printf("输入的右端项b:\n");
+    for(i=0; i<NUM; i++)
+        printf("%.4lf\n",b[i]);
+    printf("\n");
+    printf("输入初值X0:\n");
+    for(i=1; i<=NUM; i++)
+    {
+        scanf("%lf",&X0[i-1]);
+    }
+}
+
+double NF2()
+{
+    int i;
+    double z,sum1=0;
+    for(i=0; i<NUM; i++)
+    {
+        sum1+=pow(Y[i]-X[i],2);
+    }
+    z=sqrt(sum1);
+    return z;
+}
+
+int main()
+{
+    int i,j;
+    double sum;
+    Input_Matrix();
+    //雅可比迭代法
+    for(i=0; i<NUM; i++)
+    {
+        Y[i]=X0[i];
+    }
+    printf("\n");
+    printf("雅可比迭代法\n");
+    printf("迭代过程如下:\n");
+    do
+    {
+        for(i=0; i<NUM; i++)
+        {
+            X[i]=Y[i];
+        }
+        for(i=0; i<NUM; i++)
+        {
+            sum=0;
+            for(j=0; j<NUM; j++)
+            {
+                if(j!=i)
+                    sum+=A[i][j]*X[j];
+            }
+            Y[i]=(b[i]-sum)/A[i][i];
+        }
+        for(i=0; i<NUM; i++)
+        {
+            printf("%lf\t",Y[i]);
+        }
+        printf("\n");
+    }
+    while(NF2()>epsilon);
+    printf("解出方程组的解:\n");
+    for(i=0; i<NUM; i++)
+    {
+        printf("%lf\t",Y[i]);
+    }
+}
+
+2、两种：
+# include<stdio.h>
+# include<math.h>
+# define N 3
+main(){
+	float NF2(float *x,float *y);
+	float A[N][N],b[N],sum=0;
+	float x[N],y[N]={0},x0[N];
+	int i,j,n=0;
+
+
+	for(i=0;i<N;i++){
+		for(j=0;j<N;j++){
+			scanf("%f",&A[i][j]);
+		}
+	}
+
+	for(i=0;i<N;i++){
+ 		scanf("%f",&b[i]);
+	}
+
+
+	 for(i=0;i<N;i++){
+ 		scanf("%f",&x0[i]);
+ 	}
+
+	printf("输出该方程组的系数矩阵：\n");
+	 for(i=0;i<N;i++){
+		for(j=0;j<N;j++){
+			printf("%3.1f    ",A[i][j]);
+		}
+		printf("\n");
+	}
+
+	printf("输出该方程组的常数矩阵：\n");
+	for(i=0;i<N;i++){
+		printf("%3.1f\n",b[i]);
+	}
+
+
+	printf("解该方程组的的迭代初值是：\n");
+	for(i=0;i<N;i++)
+	{
+				printf("%3.1f\n",x0[i]);
+	}
+
+
+
+	for(i=0;i<N;i++)
+	{
+		x[i]=x0[i];
+	}
+	for(n=0;;n++){
+
+	for(i=0;i<N;i++){
+		sum=0;
+		for(j=0;j<N;j++){
+			if(j!=i){
+				sum=sum+A[i][j]*x[j];
+			}
+		}
+		y[i]=(1/A[i][i])*(b[i]-sum);
+
+	}
+
+		if(NF2(x,y)>0.01){
+				for(i=0;i<N;i++){
+		x[i]=y[i];
+	}
+	}
+			else
+			break;
+	}
+	printf("经过%d次雅可比迭代解出方程组的解：\n",n+1);
+	for(i=0;i<N;i++){
+		printf("%f      ",y[i]);
+	}
+
+
+	for(i=0;i<N;i++)
+	{
+		x[i]=x0[i];
+		y[i]=0;
+	}
+		for(n=0;;n++){
+
+	for(i=0;i<N;i++){
+		sum=0;
+		for(j=0;j<i;j++){
+				sum=sum+A[i][j]*y[j];
+		}
+		for(j=i+1;j<N;j++){
+				sum=sum+A[i][j]*x[j];
+		}
+		y[i]=(1/A[i][i])*(b[i]-sum);
+
+	}
+
+		if(NF2(x,y)>0.01){
+				for(i=0;i<N;i++){
+		x[i]=y[i];
+	}
+	}
+			else
+			break;
+	}
+	printf("\n经过%d次高斯-赛德尔迭代解出方程组的解：\n",n+1);
+	for(i=0;i<N;i++){
+		printf("%f      ",y[i]);
+	}
+}
+
+float NF2(float *x,float *y){
+int i;
+float z,sum1=0;
+for(i=0;i<N;i++){
+	sum1=sum1+pow(y[i]-x[i],2);
+}
+z=sqrt(sum1);
+return z;
+}
+

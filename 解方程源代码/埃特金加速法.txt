@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#define KMAX 50
+float g(float x)
+{
+    float g;
+    g=x*x*x-1;
+    return g;
+}
+void aitken(float x,float eps)
+{
+    float x0,y,z;
+    int k=0;
+      do
+     {
+         x0=x;y=g(x0);z=g(y);
+         x=z-((z-y)*(z-y))/(z-2*y+x0);
+         k++;
+
+         printf("%d,%f\n",k,x);
+     }while(fabs(x-x0)>eps||k==KMAX);
+     if(k==KMAX)
+        printf("Iteration fault\n");
+     else
+      printf("------------------------\n");
+       printf("The root of the equation is x=%f  k=%d\n",x,k);
+}
+int main()
+{
+    float x,eps;
+    printf("Please input x:");
+    scanf("%f",&x);
+     printf("Please input eps:");
+     scanf("%f",&eps);
+     printf("k,  xk\n");
+     printf("------------------------\n");
+     printf("%d,%f\n",0,x);
+
+       aitken(x,eps);
+
+    return 0;
+}

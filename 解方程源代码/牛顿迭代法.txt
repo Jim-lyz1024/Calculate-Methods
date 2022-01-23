@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+float f(float x)
+{
+    float f;
+    f=x*x*x-x-1;
+    return f;
+}
+float df(float x)
+{
+    float df;
+    df=3*x*x-1;
+    return df;
+
+}
+int main()
+{
+    float x0,x1,d,eps;
+    int k=0;
+    printf("Please input x0:");
+    scanf("%f",&x0);
+     printf("Please input eps:");
+     scanf("%f",&eps);
+     printf("k,  xk\n");
+     printf("------------------------\n");
+     printf("%d,%f\n",k,x0);
+     do
+     {
+         d=-f(x0)/df(x0);
+         x1=x0+d;
+         k++;
+         x0=x1;
+         printf("%d,%f\n",k,x0);
+     }while(fabs(d)>eps);
+        printf("------------------------\n");
+     printf("The root of the equation is x=%f  k=%d\n",x1,k);
+    return 0;
+}
